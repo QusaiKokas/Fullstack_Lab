@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const { notFoundHandler, errorHandler } = require("./middleware/errorHandler");
+const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/api/health", (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/api/tasks", taskRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
