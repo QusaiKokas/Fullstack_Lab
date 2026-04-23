@@ -1,53 +1,88 @@
 # DA219B Fullstack Lab
 
-Current status: Day 1 backend foundation is implemented and tested locally.
+This project is a fullstack web application for managing student projects with clear ownership, task status, and progress tracking.
 
 ## Problem statement
-A web app for managing student projects with clear ownership, task status, and progress tracking.
+Students often lose overview when several projects run in parallel. This app solves that by collecting projects, tasks, assignees, and priorities in one place.
 
-## Planned stack
+## Tech stack
 - Frontend: React + Vite
 - Backend: Express.js + Mongoose
 - Database: MongoDB Atlas
 
-## Folder structure
-- frontend/: React app shell
-- backend/: Express API, Mongoose models, CRUD routes, and seed script
-- docs/: ERD and report assets
+## How the system works
+The backend exposes a REST API under `/api`. The frontend will consume these endpoints to create, read, update, and delete data.
 
-## Quick start
-1. Copy backend/.env.example to backend/.env and fill values.
-2. Install dependencies:
-	- npm install
-	- npm install --prefix backend
-3. Start backend:
-	- npm run dev --prefix backend
+The application uses a clear backend structure:
+- Router: maps HTTP routes
+- Controller: handles request logic
+- Model: defines database schema and relations
 
-## Day 1 implemented
-- Router -> Controller -> Model pattern for Task API
-- Full Task CRUD endpoints
-- Input validation middleware for POST and PUT
-- Centralized JSON error handling with status codes 400, 404, 409, 500
-- Three related collections with ObjectId references:
-  - users
-  - projects
-  - tasks
-- Realistic seed script with at least 5 documents per collection
+Current data model:
+- users
+- projects
+- tasks
 
-## Backend routes (Task)
-- POST /api/tasks
-- GET /api/tasks
-- GET /api/tasks/:id
-- PUT /api/tasks/:id
-- DELETE /api/tasks/:id
+Database relations:
+- `projects.ownerId` -> `users._id`
+- `tasks.projectId` -> `projects._id`
+- `tasks.assignedTo` -> `users._id`
 
-Filtering supported on GET /api/tasks via query params:
-- status
-- projectId
-- assignedTo
+## What is implemented now
+- Express server with environment configuration
+- MongoDB connection setup through Mongoose
+- Centralized JSON error handling
+- Full Task CRUD API
+- Input validation middleware for Task create/update
+- Seed script with realistic data for all 3 collections
 
-## Seed data
-Run from project root:
-- npm run seed --prefix backend
+Implemented Task routes:
+- POST `/api/tasks`
+- GET `/api/tasks`
+- GET `/api/tasks/:id`
+- PUT `/api/tasks/:id`
+- DELETE `/api/tasks/:id`
 
-Requires a valid backend/.env with MONGODB_URI.
+Supported query filters on GET `/api/tasks`:
+- `status`
+- `projectId`
+- `assignedTo`
+
+## What will be implemented next
+- Additional relational endpoints that join collections
+- One custom endpoint for filtering/statistics
+- React UI with list/table, controlled form, edit/delete flow
+- Loading and error states in frontend
+- Auto-refresh in frontend with proper cleanup in `useEffect`
+- Search/filter feature in UI
+- ERD image and report-ready documentation in `docs/`
+
+## Project structure
+- `frontend/`: React client
+- `backend/`: Express API
+- `docs/`: ERD and report material
+
+## Setup and run
+1. Clone repository.
+2. Copy `backend/.env.example` to `backend/.env`.
+3. Fill `backend/.env`:
+	- `PORT=5000`
+	- `MONGODB_URI=<your-atlas-connection-string>`
+	- `CORS_ORIGIN=http://localhost:5173`
+	- `NODE_ENV=development`
+4. Install dependencies:
+	- `npm install`
+	- `npm install --prefix backend`
+5. Start backend:
+	- `npm run dev --prefix backend`
+
+## Seed database
+Run seed from project root:
+- `npm run seed --prefix backend`
+
+This will insert realistic users, projects, and tasks.
+
+## Important note about secrets
+Do not commit real credentials.
+- `backend/.env` must stay local.
+- `backend/.env.example` is committed as template.
