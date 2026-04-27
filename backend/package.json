@@ -5,9 +5,11 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "dev:memory": "node src/tests/devMemory.js",
     "start": "node src/server.js",
     "seed": "node src/seeds/seedData.js",
-    "test:day1": "node src/tests/day1SmokeTest.js"
+    "test:day1": "node src/tests/day1SmokeTest.js",
+    "test:endpoints": "node src/tests/endpointTest.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
